@@ -184,9 +184,9 @@ html{font-size:16px} body{font-family:'DM Sans',sans-serif;background:var(--bg);
     </button>
     <div class="demo-section">
       <p>Try demo accounts:</p>
-      <div class="demo-row"><button class="chip" onclick="fillDemo('alice_dev')">alice_dev</button><span class="demo-sep">/</span><button class="chip" onclick="fillDemo('alice_dev')">pass123</button></div>
-      <div class="demo-row"><button class="chip" onclick="fillDemo('bob_tech')">bob_tech</button><span class="demo-sep">/</span><button class="chip" onclick="fillDemo('bob_tech')">pass123</button></div>
-      <div class="demo-row"><button class="chip" onclick="fillDemo('carol_ai')">carol_ai</button><span class="demo-sep">/</span><button class="chip" onclick="fillDemo('carol_ai')">pass123</button></div>
+      <div class="demo-row"><button class="chip" onclick="fillDemo('siddhi_deshmukh')">siddhi_deshmukh</button><span class="demo-sep">/</span><button class="chip" onclick="fillDemo('siddhi_deshmukh')">pass123</button></div>
+      <div class="demo-row"><button class="chip" onclick="fillDemo('preeti_dudam')">preeti_dudam</button><span class="demo-sep">/</span><button class="chip" onclick="fillDemo('preeti_dudam')">pass123</button></div>
+      <div class="demo-row"><button class="chip" onclick="fillDemo('pratik_gadade')">pratik_gadade</button><span class="demo-sep">/</span><button class="chip" onclick="fillDemo('pratik_gadade')">pass123</button></div>
     </div>
   </div>
 </div>
@@ -244,7 +244,6 @@ html{font-size:16px} body{font-family:'DM Sans',sans-serif;background:var(--bg);
   <div class="app-content">
     <!-- POSTS -->
     <div class="tab-panel active" id="panel-posts">
-      <div class="guide-banner"><div class="guide-icon">💡</div><div class="guide-text"><h3>Quick Guide</h3><p>Create posts, connect with users, and explore trending topics. The recommendation engine uses BFS on the Java Graph. All DSA logic runs on the Spring Boot server at <strong>localhost:8080</strong>.</p></div></div>
       <h2 class="section-title">Recent Posts</h2>
       <div class="posts-grid" id="postsGrid"><div class="empty"><div class="e-icon">⏳</div><h3>Loading posts…</h3><p>Connecting to Spring Boot…</p></div></div>
     </div>
@@ -252,7 +251,6 @@ html{font-size:16px} body{font-family:'DM Sans',sans-serif;background:var(--bg);
     <!-- SUGGESTIONS -->
     <div class="tab-panel" id="panel-suggestions">
       <h2 class="section-title">Personalized Recommendations</h2>
-      <p style="color:var(--text-2);font-size:14px;margin-bottom:24px;margin-top:-12px;">People you may know — <strong>BFS friend-of-friend algorithm</strong> running in Java</p>
       <div class="sugg-grid" id="suggGrid"><div class="empty"><div class="e-icon">⏳</div><h3>Loading…</h3></div></div>
     </div>
 
@@ -268,7 +266,6 @@ html{font-size:16px} body{font-family:'DM Sans',sans-serif;background:var(--bg);
 
     <!-- TRENDING -->
     <div class="tab-panel" id="panel-trending">
-      <div class="dsa-badge">⚡ MAX-HEAP POWERED — Java Backend</div>
       <h2 class="section-title" style="display:flex;align-items:center;gap:8px;"><svg width="20" height="20" fill="none" stroke="var(--primary)" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>Trending Topics</h2>
       <div class="trend-filters" id="trendFilters"><button class="filter-chip active" onclick="filterTrend('all',this)">All</button></div>
       <div class="trend-info">
@@ -281,35 +278,46 @@ html{font-size:16px} body{font-family:'DM Sans',sans-serif;background:var(--bg);
 
     <!-- GRAPH / DSA -->
     <div class="tab-panel" id="panel-graph">
-      <div class="dsa-badge">🔬 DSA VISUALIZER — Live Java Graph Calls</div>
-      <h2 class="section-title">Graph Traversal Explorer</h2>
-      <p style="color:var(--text-2);font-size:14px;margin-bottom:28px;margin-top:-12px;">Run BFS and DFS on the live Java Graph. Results come from <code>Graph.java</code> on the Spring Boot server.</p>
-      <div class="graph-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:28px;">
+      <h2 class="section-title">Graph / DSA Explorer</h2>
+
+      <!-- VISUAL GRAPH -->
+      <div style="background:#fff;border-radius:var(--r);border:1px solid var(--border);box-shadow:var(--shadow-sm);padding:24px;margin-bottom:22px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;flex-wrap:wrap;gap:10px;">
+          <div>
+            <h3 style="font-family:'Sora',sans-serif;font-size:16px;font-weight:700;color:var(--primary);">🕸️ Live Friendship Graph — Vertices &amp; Edges</h3>
+            <p style="font-size:12px;color:var(--text-2);margin-top:4px;">Each circle = a user (vertex). Each line = a friendship (edge). This is exactly what <code>Graph.java</code> stores as an adjacency list.</p>
+          </div>
+          <button onclick="drawFriendGraph()" style="padding:8px 16px;background:var(--gradient);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;">↺ Refresh</button>
+        </div>
+        <canvas id="friendGraphCanvas" style="width:100%;height:420px;border-radius:10px;background:linear-gradient(135deg,#F8F7FF,#F0EEFF);display:block;"></canvas>
+        <div style="display:flex;gap:20px;margin-top:12px;flex-wrap:wrap;">
+          <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text-2);">
+            <div style="width:14px;height:14px;border-radius:50%;background:linear-gradient(135deg,#6C2BD9,#8B5CF6);"></div> User node (vertex)
+          </div>
+          <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text-2);">
+            <div style="width:30px;height:2px;background:#A5B4FC;border-radius:2px;"></div> Friendship (edge) — undirected
+          </div>
+          <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text-2);">
+            <div style="width:14px;height:14px;border-radius:50%;background:linear-gradient(135deg,#F59E0B,#EF4444);"></div> Highlighted node (logged-in user)
+          </div>
+        </div>
+      </div>
+
+      <!-- BFS + DFS -->
+      <div class="graph-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
         <div style="background:#fff;border-radius:var(--r);padding:24px;border:1px solid var(--border);box-shadow:var(--shadow-sm);">
-          <h3 style="font-family:'Sora',sans-serif;font-size:16px;font-weight:700;margin-bottom:12px;color:var(--primary);">🌐 BFS Traversal</h3>
+          <h3 style="font-family:'Sora',sans-serif;font-size:16px;font-weight:700;margin-bottom:8px;color:var(--primary);">🌐 BFS Traversal</h3>
           <p style="font-size:13px;color:var(--text-2);margin-bottom:16px;line-height:1.6;"><strong>Algorithm:</strong> Queue-based. Visits nodes level-by-level.<br/><strong>Used for:</strong> Friend-of-friend recommendations.</p>
-          <div class="form-group"><label>Start Username</label><input id="bfsInput" class="form-input" type="text" placeholder="e.g. alice_dev" autocomplete="off"/></div>
+          <div class="form-group"><label>Start Username</label><input id="bfsInput" class="form-input" type="text" placeholder="e.g. siddhi_deshmukh" autocomplete="off"/></div>
           <button class="btn btn-primary" style="margin-top:12px;" onclick="runBFS()"><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Run BFS</button>
           <div id="bfsResult"></div>
         </div>
         <div style="background:#fff;border-radius:var(--r);padding:24px;border:1px solid var(--border);box-shadow:var(--shadow-sm);">
-          <h3 style="font-family:'Sora',sans-serif;font-size:16px;font-weight:700;margin-bottom:12px;color:var(--primary);">🔭 DFS Traversal</h3>
+          <h3 style="font-family:'Sora',sans-serif;font-size:16px;font-weight:700;margin-bottom:8px;color:var(--primary);">🔭 DFS Traversal</h3>
           <p style="font-size:13px;color:var(--text-2);margin-bottom:16px;line-height:1.6;"><strong>Algorithm:</strong> Stack-based. Explores as deep as possible first.<br/><strong>Used for:</strong> Deep network exploration.</p>
-          <div class="form-group"><label>Start Username</label><input id="dfsInput" class="form-input" type="text" placeholder="e.g. alice_dev" autocomplete="off"/></div>
+          <div class="form-group"><label>Start Username</label><input id="dfsInput" class="form-input" type="text" placeholder="e.g. siddhi_deshmukh" autocomplete="off"/></div>
           <button class="btn btn-primary" style="margin-top:12px;" onclick="runDFS()"><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Run DFS</button>
           <div id="dfsResult"></div>
-        </div>
-      </div>
-      <div style="background:#1E1B4B;border-radius:var(--r);padding:24px;color:#A5B4FC;">
-        <p style="font-size:12px;font-weight:600;letter-spacing:.5px;margin-bottom:16px;color:#818CF8;">📊 FULL DATA FLOW — HOW EVERY REQUEST WORKS</p>
-        <div style="font-family:monospace;font-size:13px;line-height:2.2;">
-          <span style="color:#4ADE80">Browser fetch()</span> <span style="color:#6B7280">──→</span> <span style="color:#FCD34D">HTTP POST /api/friends/suggest</span> <span style="color:#6B7280">──→</span> <span style="color:#C4B5FD">Spring @RestController</span><br/>
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#6B7280">↓</span><br/>
-          <span style="color:#C4B5FD">@Autowired SocialMediaService</span> <span style="color:#6B7280">──→</span> <span style="color:#F9A8D4">RedBlackTree.getValue(username)</span> <span style="color:#6B7280">O(log n)</span><br/>
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#6B7280">↓</span><br/>
-          <span style="color:#F9A8D4">Graph.recommendFriends(userId)</span> <span style="color:#6B7280">── BFS depth-2, mutual-count sort ──</span> <span style="color:#6B7280">O(V+E)</span><br/>
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#6B7280">↓</span><br/>
-          <span style="color:#FCD34D">JSON { success, data: [...] }</span> <span style="color:#6B7280">──→</span> <span style="color:#4ADE80">Frontend renders suggestion cards</span>
         </div>
       </div>
     </div>
@@ -497,8 +505,20 @@ async function loadSuggestions() {
 }
 
 function suggCard(u) {
-  const L=u.username[0].toUpperCase(), m=u.mutualFriends||0;
-  const meta=m>0?`<svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> Followed by ${m} mutual`:"Suggested for you";
+  const L=u.username[0].toUpperCase();
+  const mutuals = u.mutualFriendNames || [];
+  const m = mutuals.length || u.mutualFriends || 0;
+  let metaText = "Suggested for you";
+  if (m > 0) {
+    if (mutuals.length >= 2) {
+      metaText = `Followed by ${mutuals[0]} + ${mutuals.length - 1} more`;
+    } else if (mutuals.length === 1) {
+      metaText = `Followed by ${mutuals[0]}`;
+    } else {
+      metaText = `Followed by ${m} mutual`;
+    }
+  }
+  const meta=m>0?`<svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> ${metaText}`:`<svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M6 20v-1a6 6 0 0 1 12 0v1"/></svg> ${metaText}`;
   return `<div class="sugg-card">
     <div class="avatar av-lg" style="${grad(u.username)}">${L}</div>
     <div class="sugg-name">${u.username}</div>
@@ -647,6 +667,7 @@ function switchTab(tab) {
   if(tab==="suggestions") loadSuggestions();
   if(tab==="connections") loadConnections();
   if(tab==="trending")    loadTrending();
+  if(tab==="graph")       setTimeout(drawFriendGraph, 80);
 }
 
 /* ── MODALS ─────────────────────────────────────────────────────────────── */
@@ -677,6 +698,136 @@ function grad(u) {
   const G=["linear-gradient(135deg,#6C2BD9,#8B5CF6)","linear-gradient(135deg,#0EA5E9,#6366F1)","linear-gradient(135deg,#F59E0B,#EF4444)","linear-gradient(135deg,#10B981,#0EA5E9)","linear-gradient(135deg,#EC4899,#8B5CF6)","linear-gradient(135deg,#F97316,#FBBF24)"];
   let h=0; for(const c of(u||"")) h=(h*31+c.charCodeAt(0))&0xff;
   return `background:${G[h%G.length]};`;
+}
+
+/* ── VISUAL FRIENDSHIP GRAPH ────────────────────────────────────────────── */
+// Hard-coded graph structure matching Graph.java seedDemoData()
+// This mirrors the exact adjacency list in the Java backend
+const GRAPH_USERS = [
+  { id:1, name:"siddhi_deshmukh",  short:"Siddhi" },
+  { id:2, name:"preeti_dudam",     short:"Preeti" },
+  { id:3, name:"pratik_gadade",    short:"Pratik" },
+  { id:4, name:"anay_deshpande",   short:"Anay"   },
+  { id:5, name:"sarita_kalshetti", short:"Sarita" },
+  { id:6, name:"anjali_durgam",    short:"Anjali" },
+  { id:7, name:"nakshatra_desale", short:"Naksh." },
+  { id:8, name:"tanuja_patange",   short:"Tanuja" },
+];
+// Edges: [userId1, userId2] — undirected, mirrors Java Graph edges
+const GRAPH_EDGES = [
+  [1,2],[1,3],[2,4],[2,5],[3,6],[4,7],[5,8],[6,7],[7,8]
+];
+
+function drawFriendGraph() {
+  const canvas = document.getElementById("friendGraphCanvas");
+  if (!canvas) return;
+  const dpr = window.devicePixelRatio || 1;
+  const rect = canvas.getBoundingClientRect();
+  const W = rect.width || 700, H = rect.height || 420;
+  canvas.width  = W * dpr;
+  canvas.height = H * dpr;
+  canvas.style.width  = W + "px";
+  canvas.style.height = H + "px";
+  const ctx = canvas.getContext("2d");
+  ctx.scale(dpr, dpr);
+
+  // Layout: circular arrangement
+  const cx = W / 2, cy = H / 2;
+  const R  = Math.min(W, H) * 0.36;
+  const n  = GRAPH_USERS.length;
+  const positions = {};
+  GRAPH_USERS.forEach((u, i) => {
+    const angle = (2 * Math.PI * i / n) - Math.PI / 2;
+    positions[u.id] = { x: cx + R * Math.cos(angle), y: cy + R * Math.sin(angle) };
+  });
+
+  // Highlight logged-in user
+  const loggedIn = currentUser ? currentUser.username : null;
+
+  // Draw edges first
+  ctx.lineWidth = 2;
+  GRAPH_EDGES.forEach(([a, b]) => {
+    const pa = positions[a], pb = positions[b];
+    ctx.beginPath();
+    ctx.moveTo(pa.x, pa.y);
+    ctx.lineTo(pb.x, pb.y);
+    // gradient line
+    const grad = ctx.createLinearGradient(pa.x, pa.y, pb.x, pb.y);
+    grad.addColorStop(0, "rgba(139,92,246,0.35)");
+    grad.addColorStop(1, "rgba(108,43,217,0.35)");
+    ctx.strokeStyle = grad;
+    ctx.stroke();
+  });
+
+  // Draw edge labels (tiny "edge" text on midpoint)
+  ctx.font = "9px DM Sans, sans-serif";
+  ctx.fillStyle = "rgba(108,43,217,0.45)";
+  ctx.textAlign = "center";
+  GRAPH_EDGES.forEach(([a, b]) => {
+    const pa = positions[a], pb = positions[b];
+    const mx = (pa.x + pb.x) / 2, my = (pa.y + pb.y) / 2;
+    ctx.fillText("edge", mx, my - 3);
+  });
+
+  // Draw nodes
+  GRAPH_USERS.forEach(u => {
+    const { x, y } = positions[u.id];
+    const isMe = loggedIn === u.name;
+    const nodeR = isMe ? 30 : 25;
+
+    // Shadow
+    ctx.save();
+    ctx.shadowColor = isMe ? "rgba(245,158,11,0.5)" : "rgba(108,43,217,0.25)";
+    ctx.shadowBlur = 14;
+
+    // Circle
+    const grd = ctx.createRadialGradient(x - nodeR*0.3, y - nodeR*0.3, 1, x, y, nodeR);
+    if (isMe) {
+      grd.addColorStop(0, "#FBBF24");
+      grd.addColorStop(1, "#EF4444");
+    } else {
+      grd.addColorStop(0, "#8B5CF6");
+      grd.addColorStop(1, "#6C2BD9");
+    }
+    ctx.beginPath();
+    ctx.arc(x, y, nodeR, 0, 2 * Math.PI);
+    ctx.fillStyle = grd;
+    ctx.fill();
+    ctx.restore();
+
+    // White border ring
+    ctx.beginPath();
+    ctx.arc(x, y, nodeR, 0, 2 * Math.PI);
+    ctx.strokeStyle = isMe ? "#FBBF24" : "#fff";
+    ctx.lineWidth = isMe ? 3 : 2;
+    ctx.stroke();
+
+    // Initial letter
+    ctx.font = `bold ${isMe ? 14 : 12}px Sora, sans-serif`;
+    ctx.fillStyle = "#fff";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText(u.short[0].toUpperCase(), x, y);
+
+    // Name label below node
+    const lblY = y + nodeR + 14;
+    ctx.font = `${isMe ? "600 11px" : "500 10px"} DM Sans, sans-serif`;
+    ctx.fillStyle = isMe ? "#B45309" : "#4B5563";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "alphabetic";
+    ctx.fillText(u.short, x, lblY);
+
+    // "vertex" label above node
+    ctx.font = "8px DM Sans, sans-serif";
+    ctx.fillStyle = "rgba(108,43,217,0.5)";
+    ctx.fillText("vertex", x, y - nodeR - 5);
+  });
+
+  // Legend top-right
+  ctx.font = "10px DM Sans, sans-serif";
+  ctx.fillStyle = "rgba(108,43,217,0.5)";
+  ctx.textAlign = "left";
+  ctx.fillText(`${GRAPH_USERS.length} vertices  ·  ${GRAPH_EDGES.length} edges`, 12, 18);
 }
 
 /* ── KEYBOARD ───────────────────────────────────────────────────────────── */

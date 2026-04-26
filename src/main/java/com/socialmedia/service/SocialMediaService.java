@@ -198,6 +198,14 @@ public class SocialMediaService {
         // GRAPH BFS: friend-of-friend recommendation
         ArrayList<int[]> recs = userGraph.recommendFriends(user.getUserId(), maxSuggestions);
 
+        // Build a map of userId -> username for all direct friends (for mutual friend names)
+        ArrayList<Integer> directFriendIds = userGraph.getFriends(user.getUserId());
+        List<String> directFriendNames = new ArrayList<>();
+        for (int fid : directFriendIds) {
+            String fn = getUsernameById(fid);
+            if (fn != null) directFriendNames.add(fn);
+        }
+
         List<Map<String, Object>> result = new ArrayList<>();
         for (int[] rec : recs) {
             String uname = getUsernameById(rec[0]);
@@ -207,6 +215,17 @@ public class SocialMediaService {
 
             Map<String, Object> m = userToMap((User) u);
             m.put("mutualFriends", rec[1]);
+
+            // Find which direct friends are also friends with this suggestion
+            ArrayList<Integer> suggFriendIds = userGraph.getFriends(rec[0]);
+            List<String> mutualNames = new ArrayList<>();
+            for (int sfid : suggFriendIds) {
+                String sfname = getUsernameById(sfid);
+                if (sfname != null && directFriendNames.contains(sfname)) {
+                    mutualNames.add(sfname);
+                }
+            }
+            m.put("mutualFriendNames", mutualNames);
             result.add(m);
         }
         return result;
@@ -381,15 +400,21 @@ public class SocialMediaService {
     }
 
     // ═════════════════════════════════════════════════════════════════════════
-    //  SEED DEMO DATA
+    //  SEED DEMO DATA  —  Indian names
     // ═════════════════════════════════════════════════════════════════════════
 
     private void seedDemoData() {
-        // Create users (Red-Black Tree + Graph)
+        // 8 Indian users — stored in Red-Black Tree (O log n each)
+        // Login with: username / pass123
         String[][] users = {
-            {"alice_dev","pass123"},{"bob_tech","pass123"},{"carol_ai","pass123"},
-            {"david_ml","pass123"},{"emma_code","pass123"},{"frank_design","pass123"},
-            {"grace_data","pass123"},{"henry_web","pass123"}
+            {"siddhi_deshmukh", "pass123"},
+            {"preeti_dudam",    "pass123"},
+            {"pratik_gadade",   "pass123"},
+            {"anay_deshpande",  "pass123"},
+            {"sarita_kalshetti","pass123"},
+            {"anjali_durgam",   "pass123"},
+            {"nakshatra_desale","pass123"},
+            {"tanuja_patange",  "pass123"}
         };
         for (String[] u : users) {
             User user = new User(nextUserId, u[0], u[1]);
@@ -398,13 +423,22 @@ public class SocialMediaService {
             nextUserId++;
         }
 
-        // Add friendships (Graph edges)
+        // Friendships (Graph edges — undirected)
+        // siddhi(1)-preeti(2), siddhi(1)-pratik(3)
+        // preeti(2)-anay(4),   preeti(2)-sarita(5)
+        // pratik(3)-anjali(6), anay(4)-nakshatra(7)
+        // sarita(5)-tanuja(8), anjali(6)-nakshatra(7)
+        // nakshatra(7)-tanuja(8)
         String[][] friendships = {
-            {"alice_dev","bob_tech"},{"alice_dev","carol_ai"},
-            {"bob_tech","david_ml"},{"bob_tech","emma_code"},
-            {"carol_ai","frank_design"},{"david_ml","grace_data"},
-            {"emma_code","henry_web"},{"frank_design","grace_data"},
-            {"grace_data","henry_web"}
+            {"siddhi_deshmukh", "preeti_dudam"},
+            {"siddhi_deshmukh", "pratik_gadade"},
+            {"preeti_dudam",    "anay_deshpande"},
+            {"preeti_dudam",    "sarita_kalshetti"},
+            {"pratik_gadade",   "anjali_durgam"},
+            {"anay_deshpande",  "nakshatra_desale"},
+            {"sarita_kalshetti","tanuja_patange"},
+            {"anjali_durgam",   "nakshatra_desale"},
+            {"nakshatra_desale","tanuja_patange"}
         };
         for (String[] f : friendships) {
             Object u1 = userTree.getValue(f[0]);
@@ -413,16 +447,24 @@ public class SocialMediaService {
                 userGraph.addEdge(((User)u1).getUserId(), ((User)u2).getUserId());
         }
 
-        // Add posts (Red-Black Tree topic frequency updates)
+        // Posts (also updates topic frequency in topicTree RBT)
         String[][] posts = {
-            {"alice_dev","ai","Just finished reading about GPT-4 and the future of large language models. The possibilities are endless! The way these models can understand context and generate human-like responses is truly revolutionary. Can't wait to integrate this into our next project! 🤖✨"},
-            {"bob_tech","tech","Quantum computing is no longer just science fiction! IBM just announced their latest breakthrough in error correction. This could revolutionize cryptography, drug discovery, and financial modeling. The future is here! 🚀💻"},
-            {"carol_ai","machinelearning","Deep dive into neural networks today! Implemented a custom CNN for image classification. Achieved 94% accuracy on the test set. The power of backpropagation and gradient descent never ceases to amaze me. Here's to continuous learning! 📊🧠"},
-            {"david_ml","ai","AI in healthcare is advancing at an incredible pace! Our team deployed a model that detects early signs of diabetes with 97% accuracy. Technology drives us ever forward! 🏥"},
-            {"emma_code","webdev","Just shipped a full-stack app built with React + Node.js + PostgreSQL. CI/CD via GitHub Actions. Clean architecture matters! 💻🔧"},
-            {"frank_design","ux","Great UX is invisible. Spent the week running usability tests and the insights were gold. Users don't read — they scan! Design with that in mind. 🎨✏️"},
-            {"grace_data","datascience","Explored a new clustering algorithm today — DBSCAN beats k-means for noisy real-world datasets! 📈"},
-            {"henry_web","react","React 19 concurrent features are 🔥. useTransition and useDeferredValue dramatically improve perceived performance!"}
+            {"siddhi_deshmukh", "ai",
+             "Just finished reading about GPT-4 and the future of large language models. The possibilities are endless! 🤖✨"},
+            {"preeti_dudam",    "tech",
+             "Quantum computing is no longer just science fiction! IBM just announced a major breakthrough in error correction. 🚀💻"},
+            {"pratik_gadade",   "machinelearning",
+             "Deep dive into neural networks today! Implemented a custom CNN — achieved 94% accuracy on the test set. 📊🧠"},
+            {"anay_deshpande",  "ai",
+             "AI in healthcare is advancing at an incredible pace! Our model detects early signs of diabetes with 97% accuracy. 🏥"},
+            {"sarita_kalshetti","webdev",
+             "Just shipped a full-stack app: React + Node.js + PostgreSQL with CI/CD via GitHub Actions. Clean architecture matters! 💻🔧"},
+            {"anjali_durgam",   "ux",
+             "Great UX is invisible. Spent the week on usability tests — users don't read, they scan! Design with that in mind. 🎨✏️"},
+            {"nakshatra_desale","datascience",
+             "Explored a new clustering algorithm — DBSCAN beats k-means for noisy real-world datasets! 📈"},
+            {"tanuja_patange",  "react",
+             "React 19 concurrent features are 🔥. useTransition and useDeferredValue dramatically improve perceived performance!"}
         };
 
         String[] dates = {
